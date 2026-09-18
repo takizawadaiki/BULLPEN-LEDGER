@@ -4,10 +4,11 @@ from pathlib import Path
 import numpy as np,pandas as pd
 ap=argparse.ArgumentParser();ap.add_argument('--raw',type=Path,required=True);raw=ap.parse_args().raw;out=Path(__file__).resolve().parent
 norm=lambda s:''.join(c.lower() for c in unicodedata.normalize('NFKD',str(s)) if c.isascii() and c.isalpha())
-names={}
+names={};displayNames={}
 for y in [2024,2025]:
  z=zipfile.ZipFile(raw/f'{y}.zip');people=pd.read_csv(z.open(f'{y}allplayers.csv'))
- for r in people.itertuples():names[norm(f'{r.last}{r.first}')]=r.id
+ for r in people.itertuples():
+  names[norm(f'{r.last}{r.first}')]=r.id;displayNames[r.id]=f'{r.first} {r.last}'
 s=pd.concat([pd.read_csv(raw/f'tor-{y}{h}.csv',low_memory=False) for y in [2024,2025] for h in ['a','b']],ignore_index=True)
 assert not s.duplicated(['game_pk','at_bat_number','pitch_number']).any()
 s['pitteam']=np.where(s.inning_topbot=='Top',s.home_team,s.away_team);assert (s.pitteam=='TOR').all()
@@ -22,7 +23,7 @@ ff=s[(s.pitch_type=='FF')&s.release_speed.between(70,110)].groupby(['id','day','
 v=counts.merge(ff,on=['id','day','game_pk'],how='left').merge(a,on=['id','day'],validate='one_to_one')
 v['difference']=v.statcastRows-v.pitches
 v=v.sort_values(['id','day']);qual=v[v.relief&(v.ffN>=5)].copy();qual['priorFFN']=qual.groupby(['id','year']).cumcount();qual['priorV']=qual.groupby(['id','year']).velocity.transform(lambda x:x.shift().rolling(5,min_periods=3).mean());qual['deltaV']=qual.velocity-qual.priorV
-q=qual[(qual.priorFFN>=3)&(qual.priorRelief>=5)].copy();q['dateISO']=q.day.dt.strftime('%Y-%m-%d');q['name']=q.id.map({r.id:f'{r.first} {r.last}' for r in people.itertuples()})
+q=qual[(qual.priorFFN>=3)&(qual.priorRelief>=5)].copy();q['dateISO']=q.day.dt.strftime('%Y-%m-%d');q['name']=q.id.map(displayNames);assert q.name.notna().all()
 rng=np.random.default_rng(71);stats=[]
 for year in [2024,2025]:
  for rest in ['0 days','1 day','2 days','3+ days']:

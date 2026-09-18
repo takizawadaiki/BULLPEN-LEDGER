@@ -29,6 +29,7 @@ pip install -r requirements.txt
 python download.py --raw raw
 python analyze.py --raw raw
 python toronto.py --raw raw
+python diagnostics.py --raw raw
 python build_data.py
 python verify.py --raw raw
 ```
@@ -69,7 +70,7 @@ The information used here was obtained free of charge from and is copyrighted by
 
 - `RESEARCH_PLAN.md`: specification written before fitting; not an externally registered study.
 - `RESEARCH_BRIEF.md`: concise interpretation and interview discussion guide.
-- `download.py`, `analyze.py`, `toronto.py`, `build_data.py`, `verify.py`: reproduction pipeline.
+- `download.py`, `analyze.py`, `toronto.py`, `diagnostics.py`, `build_data.py`, `verify.py`: reproduction pipeline.
 - `data/summary.json`: results, confidence intervals, exclusions and model coefficients.
 - `data/modeling-appearances.csv`: complete analysis table.
 - `data/heldout-appearances.csv`: 2025 board records.
@@ -78,3 +79,20 @@ The information used here was obtained free of charge from and is copyrighted by
 - `data/verification.json`: source-level verification results.
 
 Development note: the bundled local NumPy/BLAS emitted arithmetic warnings during some matrix multiplications. All predictions were finite and were checked against elementwise coefficient calculations; exported RMSEs are independently reconstructed by verify.py. No warning-generated NaNs were retained.
+
+
+## Revision 2 — deeper diagnostics and an as-of pitcher dossier
+
+The original 2025 holdout has already been reviewed. New subgroup checks are therefore **post-hoc diagnostics**, with the original model coefficients kept fixed. They are not a new untouched evaluation or a reason to tune the model against 2025.
+
+The added evaluation slices are: inning 7+ entries with score margin within three; 0–6 MLB off-days; completed outings with at most six BF (explicitly outcome-conditioned); and equal-appearance rather than BF-weighted evaluation. The original full-sample interval remains unchanged. Additional intervals use 1,000 pitcher-cluster resamples with seed 1729, and are pointwise rather than multiplicity-adjusted. Their sample sizes and exact definitions are published in data/diagnostics.json. Frozen row predictions are in data/frozen-predictions.csv.
+
+A fixed league-average benchmark uses the BF-weighted 2023–2024 target mean. This contextualizes how much the prior-performance/context model improves over assigning one constant value to every appearance. Neither benchmark nor diagnostic adds a newly trained model.
+
+The new pitcher dossier is anchored to the selected appearance, not the last day in the database. Daily pitch history is truncated strictly before the selected date, includes starts and other clubs, and spans up to 42 previous dates (never earlier than the source season's March 18 start). The earlier-outcome table uses only earlier eligible relief appearances. The workload percentile is the fraction of earlier eligible appearances with seven-day workload less than or equal to the selected value; at least ten earlier appearances are required. It is a descriptive empirical rank, not a physiological norm or risk estimate.
+
+There are 258 eligible 2025 appearances after 14+ MLB off-days. These receive an explicit missing-context flag; neither 14 days nor the 0–6 diagnostic restriction is a physiological threshold. An MLB gap can include minor-league games, rehab or other throwing.
+
+Toronto data-quality sensitivity holds velocity baselines fixed and removes current appearances with a pitch-count discrepancy greater than two. It does not remove every potentially affected baseline observation and is not a missingness correction. The 2025 zero-off-day mean is approximately −0.142 mph in 39 appearances and −0.130 mph in the 37 retained appearances. The 2024 mean shifts from approximately −0.170 to −0.255 mph, so source disagreement is not dismissed as harmless. Both seasons are visible in the dashboard.
+
+Review links preserve board filters, as-of date and selected appearance. They work once this exact version is hosted; localhost/file links are only local. Filtered CSV exports include observed outcomes and are explicitly for retrospective review. They should not be confused with a pre-appearance feature-only feed.

@@ -37,5 +37,30 @@ html=(p/'index.html').read_text()
 for href in re.findall(r'(?:src|href)="([^"#]+)"',html):
  if not href.startswith(('http','data:')):assert (p/href).exists(),href
 v=pd.read_csv(p/'data/toronto-velocity.csv');assert (v.ffN>=5).all() and (v.priorFFN>=3).all();assert np.allclose(v.deltaV,v.velocity-v.priorV)
-result={'status':'passed','sourceWorkloadSamples':120,'boardHistories':len(b),'predictionChecks':2,'modelingRows':len(m),'velocityRows':len(v),'checks':['unique appearance keys','cohort exclusions','nonnegative nested workload windows','outcome formula','source-derived rest and pitch windows','all board history sums','independent frozen model RMSE','no outcome/future fields in predictors','velocity sample rules','local page references']}
+# Revision 2: frozen diagnostics and strictly dated source history.
+d=json.loads((p/'data/diagnostics.json').read_text());frozen=pd.read_csv(p/'data/frozen-predictions.csv')
+assert len(frozen)==len(test) and not frozen.duplicated(['gid','id']).any()
+assert d['longGaps']==int((test.rest>=14).sum())
+for pid,dates in d['histories'].items():
+ assert dates==sorted(dates)
+ for date,count in dates:assert count==daily.loc[(pid,pd.Timestamp(date))]
+for r in b:
+ hist=dict(d['histories'][r['id']]);today=pd.Timestamp(r['dateISO'])
+ expected=sum(hist.get((today-pd.Timedelta(days=i)).strftime('%Y-%m-%d'),0) for i in range(1,8))
+ assert expected==r['p7']
+for record in d['checks']:
+ a=test
+ if record['label']=='Late & close':a=a[(a.entry>=7)&(abs(a.margin)<=3)]
+ elif record['label']=='No long MLB gaps':a=a[a.rest<=6]
+ elif record['label']=='Short outings':a=a[a.p_bfp<=6]
+ assert len(a)==record['n'] and a.id.nunique()==record['pitchers']
+ source=a.merge(frozen[['gid','id','context','workload']],on=['gid','id'],validate='one_to_one')
+ weights=np.ones(len(source)) if record['weight']=='equal' else source.p_bfp
+ for model in ['context','workload']:
+  expected=100*np.sqrt(np.average((source.y-source[model])**2,weights=weights));assert abs(expected-record[model])<1e-6
+ assert abs(record['delta']-(record['workload']-record['context']))<1e-9
+assert np.allclose([d['checks'][0]['lo'],d['checks'][0]['hi']],np.array(s['rmseDeltaCI'])*100)
+assert sum(a['n'] for a in d['monthly'])==len(test)
+assert v.name.notna().all()
+result={'status':'passed','sourceWorkloadSamples':120,'boardHistories':len(b),'predictionChecks':2,'modelingRows':len(m),'velocityRows':len(v),'diagnosticSlices':len(d['checks']),'historyPitchers':len(d['histories']),'checks':['unique appearance keys','cohort exclusions','nonnegative nested workload windows','outcome formula','source-derived rest and pitch windows','all board history sums','independent frozen model RMSE','no outcome/future fields in predictors','velocity sample rules','local page references','raw-source daily dossier histories','all dossier prior-7 totals','independent diagnostic subset errors','primary confidence interval preserved','monthly coverage','Toronto display names']}
 (p/'data/verification.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))

@@ -49,3 +49,12 @@ Other limitations include omitted opponent quality, handedness, exact recovery h
 Before presenting, run a few appearances yourself and explain each feature and calculation in your own words. Describe the use of coding or analytical assistance accurately if asked.
 
 Sources and full methods: [README](README.md), [Retrosheet](https://www.retrosheet.org/downloads/csvdownloads.html), [Baseball Savant documentation](https://baseballsavant.mlb.com/csv-docs). Exact computed results: [summary](data/summary.json), [Toronto supplement](data/toronto.json).
+
+
+## Revision 2: a stronger demonstration
+
+Start by selecting Brendon Little and a historical appearance. Use the dossier to explain which pitches occurred before that date, how the seven-day total compares with his own earlier eligible outings, and what remains unobserved. A relative workload rank is not a probability of fatigue.
+
+Then open “Does the conclusion travel?” Explain that the models remain frozen and the new slices are post-hoc. The incremental-workload intervals span zero in the late/close, no-long-gap, short-outing and equal-weight checks. Contrast that with the context model's improvement over a single league-average prediction. This isolates the research question: prior performance/context has some value, but these added workload features have not shown a clear benefit for this target and model.
+
+Finally, demonstrate the as-of-date control, a link that restores the selected record, and a filtered CSV export. This makes the work easy for another analyst to audit and discuss. Use the Toronto feed-agreement sensitivity to show that data-source discrepancies were measured, not silently ignored.

@@ -17,3 +17,9 @@ Inference: pitcher-season fixed effects, batters-faced weighting, pitcher-cluste
 Supplement: Toronto 2024–2025 Statcast four-seam velocity relative to a pitcher's prior five Toronto four-seam appearances. Keep pitch type constant, require at least five measured four-seam pitches in the current appearance and three earlier qualifying appearances. Exploratory only; no injury inference.
 
 Deliverables: interactive historical appearance board, workload/performance comparison, held-out model evaluation, Toronto velocity panel, methods, reproducible scripts and source manifest. No roster availability claims and no medical or injury-risk score.
+
+## Revision 2: diagnostic extension
+
+Requested after reviewing version 1. Keep both predictive models and the 2025 evaluation population fixed. These additional checks are **post-hoc diagnostics**, not a new untouched test. Evaluate frozen predictions in late/close entries (inning 7+ and absolute margin at most 3), appearances with at most six MLB off-days, and shorter outings (at most six BF, an outcome-conditioned descriptive subset). Also evaluate equal-appearance weighting and month-level stability. Use paired pitcher-bootstrap intervals; do not select or refit a model using these results.
+
+Add an as-of-appearance pitcher dossier using strictly earlier dated MLB pitch records; flag gaps of 14+ MLB off-days as incomplete recovery context. This threshold is a display convention, not a validated physiological cutoff. Audit the Toronto name join across both source seasons and assess pitch-feed discrepancies without replacing the original velocity analysis.

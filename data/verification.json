@@ -5,6 +5,8 @@
   "predictionChecks": 2,
   "modelingRows": 38925,
   "velocityRows": 382,
+  "diagnosticSlices": 5,
+  "historyPitchers": 459,
   "checks": [
     "unique appearance keys",
     "cohort exclusions",
@@ -15,17 +17,25 @@
     "independent frozen model RMSE",
     "no outcome/future fields in predictors",
     "velocity sample rules",
-    "local page references"
+    "local page references",
+    "raw-source daily dossier histories",
+    "all dossier prior-7 totals",
+    "independent diagnostic subset errors",
+    "primary confidence interval preserved",
+    "monthly coverage",
+    "Toronto display names"
   ],
+  "revision": "2",
   "browserChecks": [
-    "club/month/usage filters",
-    "empty filter result",
-    "pagination",
-    "Toronto season switch",
-    "evidence period switch",
-    "mobile document width",
-    "desktop layout",
-    "WebMCP read and invalid-input rejection",
-    "no browser errors"
+    "as-of date cutoff",
+    "pitcher dossier before selected date",
+    "long-gap context flag",
+    "empty result hides dossier",
+    "URL state restored after reload",
+    "copy review link",
+    "filtered CSV export",
+    "mobile document width equals viewport",
+    "desktop dossier layout",
+    "no console errors"
   ]
 }
