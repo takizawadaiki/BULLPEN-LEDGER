@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "sourceWorkloadSamples": 120,
+  "boardHistories": 13081,
+  "predictionChecks": 2,
+  "modelingRows": 38925,
+  "velocityRows": 382,
+  "checks": [
+    "unique appearance keys",
+    "cohort exclusions",
+    "nonnegative nested workload windows",
+    "outcome formula",
+    "source-derived rest and pitch windows",
+    "all board history sums",
+    "independent frozen model RMSE",
+    "no outcome/future fields in predictors",
+    "velocity sample rules",
+    "local page references"
+  ],
+  "browserChecks": [
+    "club/month/usage filters",
+    "empty filter result",
+    "pagination",
+    "Toronto season switch",
+    "evidence period switch",
+    "mobile document width",
+    "desktop layout",
+    "WebMCP read and invalid-input rejection",
+    "no browser errors"
+  ]
+}

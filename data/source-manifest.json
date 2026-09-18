@@ -1,0 +1,48 @@
+{
+  "retrieved": "2026-09-17",
+  "sources": [
+    {
+      "file": "2023.zip",
+      "url": "https://www.retrosheet.org/downloads/2023/2023csvs.zip",
+      "sha256": "7faea3925007ea469fb8a72393b3b1b901a4156e248ec07854d7aa2eb389d1ed"
+    },
+    {
+      "file": "2024.zip",
+      "url": "https://www.retrosheet.org/downloads/2024/2024csvs.zip",
+      "sha256": "f438fb7574ba068ae66976d4c2597fd8a5f5838f4b56702515f8afb941630b28"
+    },
+    {
+      "file": "2025.zip",
+      "url": "https://www.retrosheet.org/downloads/2025/2025csvs.zip",
+      "sha256": "3d1e0e81d5913a635ae7a80366b811b777b832b488274124b4e38e04dd892753"
+    },
+    {
+      "file": "tor-2024a.csv",
+      "url": "https://baseballsavant.mlb.com/statcast_search/csv?all=true&type=details&player_type=pitcher&hfGT=R%7C&hfTeam=TOR%7C&game_date_gt=2024-03-01&game_date_lt=2024-06-30",
+      "sha256": "927b7b1c463f4db5be7970d1f62bfe2cec6367592cb7bd0719282b12ae308b93"
+    },
+    {
+      "file": "tor-2024b.csv",
+      "url": "https://baseballsavant.mlb.com/statcast_search/csv?all=true&type=details&player_type=pitcher&hfGT=R%7C&hfTeam=TOR%7C&game_date_gt=2024-07-01&game_date_lt=2024-10-01",
+      "sha256": "dd1b09e0c8cb54bee2a207f83aa4aaf09b449e534532d1407e5d33d17bdfc141"
+    },
+    {
+      "file": "tor-2025a.csv",
+      "url": "https://baseballsavant.mlb.com/statcast_search/csv?all=true&type=details&player_type=pitcher&hfGT=R%7C&hfTeam=TOR%7C&game_date_gt=2025-03-01&game_date_lt=2025-06-30",
+      "sha256": "8939ebda52a99e74330e0f70cc3bfe6c08af700d81d4589079f8d65673085482"
+    },
+    {
+      "file": "tor-2025b.csv",
+      "url": "https://baseballsavant.mlb.com/statcast_search/csv?all=true&type=details&player_type=pitcher&hfGT=R%7C&hfTeam=TOR%7C&game_date_gt=2025-07-01&game_date_lt=2025-10-01",
+      "sha256": "204b027e17e0981a4f2b035b1d79f3d003ca8f9f561dbffbdfffd44ebe83aeea"
+    }
+  ],
+  "seed": 71,
+  "training": [
+    2023,
+    2024
+  ],
+  "test": [
+    2025
+  ]
+}
